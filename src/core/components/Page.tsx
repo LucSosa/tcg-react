@@ -4,7 +4,7 @@ import { Footer } from "../../core/components/Footer"
 import { PropsWithChildren } from "react"
 
 export const Page : React.FC<PropsWithChildren> = ({children}) => {
-    return <Container size='3'>
+    return <Container size='3' style={{paddingTop: '15px'}}>
         <Flex direction={'column'}>
             <MainHeader />
             {children}
