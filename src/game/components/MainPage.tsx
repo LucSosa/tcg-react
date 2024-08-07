@@ -1,13 +1,11 @@
-import { Container, Flex, Text } from "@radix-ui/themes"
-import { MainHeader } from "../../core/components/MainHeader"
+import { Flex, Text } from "@radix-ui/themes"
 import { MessagePanel } from "../../core/components/MessagePanel"
-import { Footer } from "../../core/components/Footer"
 import { LoginContainer } from "../../player/components/LoginContainer"
+import { Page } from "../../core/components/Page"
 
 export const MainPage = () => {
-    return <Container size='3'>
-        <Flex direction={'column'}>
-            <MainHeader />
+    return (
+        <Page>
             <Text size="6" align={"center"} style={{ margin: '15px'}}>
                 Welcome to the TCG made in react, create an account and start to battle
             </Text>
@@ -23,7 +21,6 @@ export const MainPage = () => {
                     <LoginContainer />
                 </Flex>
             </Flex>
-        </Flex>
-        <Footer />
-    </Container>
+        </Page>
+    )
 }
