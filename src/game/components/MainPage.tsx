@@ -1,8 +1,8 @@
-import { Card, Container, Flex, Text } from "@radix-ui/themes"
+import { Container, Flex, Text } from "@radix-ui/themes"
 import { MainHeader } from "../../core/components/MainHeader"
-import { Header } from "@radix-ui/themes/dist/cjs/components/table"
 import { MessagePanel } from "../../core/components/MessagePanel"
 import { Footer } from "../../core/components/Footer"
+import { LoginContainer } from "../../player/components/LoginContainer"
 
 export const MainPage = () => {
     return <Container size='3'>
@@ -20,7 +20,7 @@ export const MainPage = () => {
                     />
                 </Flex>
                 <Flex direction='column' flexGrow='1'>
-                    <Card>Login</Card>
+                    <LoginContainer />
                 </Flex>
             </Flex>
         </Flex>
