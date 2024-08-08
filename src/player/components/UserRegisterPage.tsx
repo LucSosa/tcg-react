@@ -1,7 +1,17 @@
 import { Button, Card, Container, Flex, Text, TextField } from "@radix-ui/themes"
 import { Page } from "../../core/components/Page"
+import { useState } from "react"
 
 export const UserRegisterPage = () => {
+    const [email, setEmail] = useState<string>();
+    const [username, setUsername] = useState<string>();
+    const [password, setPassword] = useState<string>();
+    const [rePassword, setRePassword] = useState<string>();
+
+    const onSubmit = () => {
+        console.log(email, username, password, rePassword);   
+    }
+
     return (
         <Page>
             <Text size="6" align={"center"} style={{ margin: '15px'}}>
@@ -15,30 +25,30 @@ export const UserRegisterPage = () => {
                                 <Text size="3">Register</Text>
                                 <div>
                                     <Text size="1">Email</Text>
-                                    <TextField.Root placeholder="Enter your e-mail">
+                                    <TextField.Root placeholder="Enter your e-mail" value={email} onChange={(e) => setEmail(e.target.value)}>
                                         <TextField.Slot />
                                     </TextField.Root>
                                 </div>
                                 <div>
                                     <Text size="1">Username</Text>
-                                    <TextField.Root placeholder="Enter your username">
+                                    <TextField.Root placeholder="Enter your username" value={username} onChange={(e) => setUsername(e.target.value)}>
                                         <TextField.Slot />
                                     </TextField.Root>
                                 </div>
                                 <div>
                                     <Text size="1">Password</Text>
-                                    <TextField.Root placeholder="Enter your password" type="password">
+                                    <TextField.Root placeholder="Enter your password" type="password" value={password} onChange={(e) => setPassword(e.target.value)}>
                                         <TextField.Slot />
                                     </TextField.Root>
                                 </div>
                                 <div>
                                     <Text size="1">Repeat Password</Text>
-                                    <TextField.Root placeholder="Enter your password again" type="password">
+                                    <TextField.Root placeholder="Enter your password again" type="password" value={rePassword} onChange={(e) => setRePassword(e.target.value)}>
                                         <TextField.Slot />
                                     </TextField.Root>
                                 </div>
 
-                                <Button>Submit</Button>
+                                <Button onClick={onSubmit}>Submit</Button>
                             </Flex>
                         </Container>
                     </Card>
