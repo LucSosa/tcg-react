@@ -1,6 +1,22 @@
 import { Button, Card, Container, Flex, Text, TextField } from "@radix-ui/themes"
 import { Page } from "../../core/components/Page"
 import { useState } from "react"
+import { User } from "../model/user"
+
+const saveUser = async (userData: User) => {
+try {
+    const response = await fetch("http://localhost:5000/user", {
+        method: "POST", 
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData), 
+    });
+    return await response.json();
+} catch(e) {
+    console.error(e);
+    
+}}
 
 export const UserRegisterPage = () => {
     const [email, setEmail] = useState<string>();
@@ -10,11 +26,17 @@ export const UserRegisterPage = () => {
 
     const onSubmit = () => {
         console.log(email, username, password, rePassword);   
+
+        if (email && username && password &&  (password === rePassword)){
+            const user: User = {email, password, username};
+
+            saveUser(user);
+        }
     }
 
     return (
         <Page>
-            <Text size="6" align={"center"} style={{ margin: '15px'}}>
+            <Text size="3" align={"center"} style={{ margin: '15px'}}>
                 Please fill up the form for the registration.
             </Text>
             <Flex gap="1.5">
