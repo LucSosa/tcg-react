@@ -1,9 +1,20 @@
-import { Button, Card, Container, Flex, Text, TextField } from "@radix-ui/themes"
+import { Button, Callout, Card, Container, Flex, Text, TextField } from "@radix-ui/themes"
 import { Page } from "../../core/components/Page"
 import { useState } from "react"
 import { User } from "../model/user"
+import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { Link } from "react-router-dom";
 
-const saveUser = async (userData: User) => {
+interface ApiResponse<T> {
+    data: T | null;
+    error?: Error;
+}
+
+interface ErrorResponse {
+    error: string;
+}
+
+const saveUser = async (userData: User): Promise<ApiResponse<User>> => {
 try {
     const response = await fetch("http://localhost:5000/user", {
         method: "POST", 
@@ -12,10 +23,29 @@ try {
         },
         body: JSON.stringify(userData), 
     });
-    return await response.json();
-} catch(e) {
-    console.error(e);
+
+    let data;
+
+    if(response.status !== 200) {
+        data = (await response.json()) as  ErrorResponse;
+        throw Error(data.error);
+    } else {
+        data = (await response.json()) as User;
+    }
+
+    const resolved: ApiResponse<User> = {
+        data,
+    }
     
+    return resolved;
+
+} catch(e) {
+    const error = e as Error;
+    const resolved: ApiResponse<User> = {
+        data: null,
+        error,
+    }
+    return resolved;
 }}
 
 export const UserRegisterPage = () => {
@@ -23,14 +53,23 @@ export const UserRegisterPage = () => {
     const [username, setUsername] = useState<string>();
     const [password, setPassword] = useState<string>();
     const [rePassword, setRePassword] = useState<string>();
+    const [errorMessage, setErrorMessage] = useState<string>();
+    const [isRegisterDone, setIsRegisterDone] = useState<boolean>(false);
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         console.log(email, username, password, rePassword);   
 
-        if (email && username && password &&  (password === rePassword)){
+        if(email && username && password &&  (password === rePassword)){
             const user: User = {email, password, username};
 
-            saveUser(user);
+            const savedUser: ApiResponse<User> = await saveUser(user);
+
+            if(savedUser.data) {
+                setIsRegisterDone(true);
+                setErrorMessage(undefined);
+            } else {
+                setErrorMessage(savedUser.error?.message);
+            }
         }
     }
 
@@ -43,35 +82,73 @@ export const UserRegisterPage = () => {
                 <Flex direction={'column'} flexGrow={'1'}>
                     <Card>
                         <Container size={'1'} maxWidth={'400px'}>
-                            <Flex direction={'column'} gap={'2'}>
-                                <Text size="3">Register</Text>
+                            {!isRegisterDone ? (
+                                <Flex direction={"column"} gap={"2"}>
+                                <Text size="3"> Register</Text>
                                 <div>
-                                    <Text size="1">Email</Text>
-                                    <TextField.Root placeholder="Enter your e-mail" value={email} onChange={(e) => setEmail(e.target.value)}>
-                                        <TextField.Slot />
+                                    <Text size={"1"}>E-mail</Text>
+                                    <TextField.Root
+                                        placeholder="Enter your e-mail"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    >
+                                    <TextField.Slot></TextField.Slot>
                                     </TextField.Root>
                                 </div>
                                 <div>
-                                    <Text size="1">Username</Text>
-                                    <TextField.Root placeholder="Enter your username" value={username} onChange={(e) => setUsername(e.target.value)}>
-                                        <TextField.Slot />
+                                    <Text size={"1"}>Username</Text>
+                                    <TextField.Root
+                                        placeholder="Enter your username"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                    >
+                                    <TextField.Slot></TextField.Slot>
                                     </TextField.Root>
                                 </div>
                                 <div>
-                                    <Text size="1">Password</Text>
-                                    <TextField.Root placeholder="Enter your password" type="password" value={password} onChange={(e) => setPassword(e.target.value)}>
-                                        <TextField.Slot />
+                                    <Text size={"1"}>Password</Text>
+                                    <TextField.Root
+                                        placeholder="Enter your password"
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    >
+                                    <TextField.Slot></TextField.Slot>
                                     </TextField.Root>
                                 </div>
                                 <div>
-                                    <Text size="1">Repeat Password</Text>
-                                    <TextField.Root placeholder="Enter your password again" type="password" value={rePassword} onChange={(e) => setRePassword(e.target.value)}>
-                                        <TextField.Slot />
+                                    <Text size={"1"}>Repeat Password</Text>
+                                    <TextField.Root
+                                        placeholder="Enter your password once more"
+                                        type="password"
+                                        value={rePassword}
+                                        onChange={(e) => setRePassword(e.target.value)}
+                                    >
+                                    <TextField.Slot></TextField.Slot>
                                     </TextField.Root>
                                 </div>
 
                                 <Button onClick={onSubmit}>Submit</Button>
-                            </Flex>
+
+                                {errorMessage ? (
+                                    <Callout.Root color="red">
+                                    <Callout.Icon>
+                                        <InfoCircledIcon />
+                                    </Callout.Icon>
+                                    <Callout.Text>{errorMessage}</Callout.Text>
+                                    </Callout.Root>
+                                ) : null}
+                                </Flex>
+                            ) : (
+                                <Callout.Root color="blue">
+                                <Callout.Icon>
+                                    <InfoCircledIcon />
+                                </Callout.Icon>
+                                <Callout.Text>
+                                    Your register is done <Link to='/'> Login </Link>
+                                </Callout.Text>
+                                </Callout.Root>
+                            )}
                         </Container>
                     </Card>
                 </Flex>
