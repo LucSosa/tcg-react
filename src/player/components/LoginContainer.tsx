@@ -3,21 +3,34 @@ import { Button, Card, Flex, Text, TextField } from "@radix-ui/themes"
 import { useContext, useState } from "react"
 import { Link } from "react-router-dom"
 import UserContext from "../UserContext"
+import { usePostApi } from "../../core/hooks/useApi"
+
+type LoginCredential = {
+    usernameEmail: string,
+    password: string,
+}
 
 export const LoginContainer = () => {
     const { login } = useContext(UserContext);
     const [usernameEmail, setUsernameEmail] = useState<string>();
-    const [passsord, setPassword] = useState<string>()
+    const [password, setPassword] = useState<string>();
+    const [loginResponse, setCredentials] = usePostApi<LoginCredential, boolean>('http://localhost:5000/user/authenticate');
 
     const submit = () => {
-        console.log(usernameEmail, passsord);
+        if(usernameEmail && password) {
+            setCredentials({
+                usernameEmail,
+                password
+            })
+        }
     }
 
     return (
         <Card>
             <Flex direction={'column'} gap={'2'}>
                 <Text size='3'>Login</Text>
-                <Text size='1'>E-mail</Text>
+                <Text size='1'>Username or E-mail</Text>
+                <>{JSON.stringify(loginResponse)}</>
                 <TextField.Root 
                     placeholder="Enter your username or e-mail" 
                     value={usernameEmail} 
@@ -31,7 +44,7 @@ export const LoginContainer = () => {
                 <TextField.Root 
                     placeholder="Enter your passsord" 
                     type="password"
-                    value={passsord}
+                    value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 >
                     <TextField.Slot>

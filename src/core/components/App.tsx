@@ -1,6 +1,5 @@
 import { User } from '../../player/model/user';
 import UserContext from '../../player/UserContext';
-import './App.css';
 import { PropsWithChildren, useState } from 'react';
 
 export const App: React.FC<PropsWithChildren> = ({children}) => {
