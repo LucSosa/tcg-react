@@ -3,7 +3,14 @@ import UserContext from '../../player/UserContext';
 import { PropsWithChildren, useState } from 'react';
 
 export const App: React.FC<PropsWithChildren> = ({children}) => {
-  const [user, setUser] = useState<User>();
+  const savedUserString = sessionStorage.getItem('user');
+  let savedUser;
+
+  if(savedUserString) {
+    savedUser =  JSON.parse(savedUserString) as User;
+  }
+
+  const [user, setUser] = useState<User | undefined>(savedUser);
 
   const login = (user: User) => {
     setUser(user);
@@ -11,6 +18,7 @@ export const App: React.FC<PropsWithChildren> = ({children}) => {
 
   const logout = () => {
     setUser(undefined);
+    sessionStorage.removeItem('user');
   };
 
 
