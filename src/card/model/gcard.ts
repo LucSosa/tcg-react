@@ -8,7 +8,7 @@ export type GCardType = typeof gcardType[number];
 export type GCardColor = typeof gcardColor[number];
 export type GCardSpellType = typeof gcardSpells[number];
 
-export interface GCard {
+export interface GCardBase {
     name: string;
     rarity: Rarity;
     type: GCardType;
@@ -17,16 +17,18 @@ export interface GCard {
     id: string;
 }
 
-export interface GCardMonster extends GCard {
+export interface GCardMonster extends GCardBase {
     power: number;
     life: number;
 }
 
-export interface GCardSpell extends GCard {
+export interface GCardSpell extends GCardBase {
     spell: GCardSpellType;
 }
 
-export interface GCardEquipament extends GCard {
+export interface GCardEquipament extends GCardBase {
     power?: number;
     life?: number;
 }
+
+export type GCard = GCardMonster | GCardSpell | GCardEquipament;
