@@ -10,6 +10,7 @@ import { UserRegisterPage } from './player/components/UserRegisterPage';
 import { MainPage } from './game/components/MainPage';
 import { UserLandingPage } from './player/components/UserLandingPage';
 import { NonAuthorized } from './core/components/NonAuthorized';
+import { ManageDeckPage } from './card/ManageDeckPage';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <UserRegisterPage />,
+  },
+  {
+    path: "/manage-deck",
+    element: <ManageDeckPage />
   }
 ]);
 
