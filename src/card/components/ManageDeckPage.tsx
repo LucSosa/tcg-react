@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 import { Text, Flex, Button, Card } from "@radix-ui/themes";
 import { Page } from "../../core/components/Page";
 import { useGetApi } from "../../core/hooks/useApi";
+import { GCard } from "../model/gcard";
 
 
 export const ManageDeckPage = () => {
-  const response = useGetApi('http://localhost:5000/gcard')
+  const response = useGetApi<GCard[]>('http://localhost:5000/gcard')
 
   return (
     <Page>
