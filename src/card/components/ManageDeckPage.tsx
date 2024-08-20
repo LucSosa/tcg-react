@@ -9,10 +9,9 @@ import { GCardView } from "./GCardView";
 export const ManageDeckPage = () => {
   const response = useGetApi<GCard[]>("http://localhost:5000/gcard")
 
-  {console.log(response?.data)}
   return (
     <Page>
-      {response && response.data && 'olá'}
+{response && response.data && <GCardView gcard={response.data[29]}></GCardView>}
       <Flex justify={"center"} align={"center"} direction={"column"}>
         <Link to={'/user'} style={{alignSelf: 'end', margin: '10px'}}><Button>Back</Button></Link>
         <Text size={"5"}>Manage deck</Text>
