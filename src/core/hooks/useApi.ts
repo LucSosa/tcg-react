@@ -4,11 +4,11 @@ import { ApiResponse, ErrorResponse } from "../models/api";
 async function apiCall<T, K> (url: string, method: 'GET' | 'POST', body?: T): Promise<ApiResponse<K>> {
 try {
     const response = await fetch(url, {
-        method: "POST", 
+        method: method, 
         headers: {
           "Content-Type": "application/json",
         },
-        body: method !== 'GET' ? JSON.stringify(body) : null, 
+        body: method !== 'GET' ?JSON.stringify(body) : null,
     });
 
     let data;
